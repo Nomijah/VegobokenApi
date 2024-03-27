@@ -1,6 +1,6 @@
 import { getUserBySessionToken } from "../db/users";
 import express from "express";
-import { get, identity, merge } from "lodash";
+import { get, merge } from "lodash";
 
 export const isOwner = async (
   req: express.Request,

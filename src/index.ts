@@ -17,7 +17,7 @@ app.use(
 
 app.use(compression());
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "3mb" })); // Change request size limit here
 
 const server = http.createServer(app);
 
@@ -26,10 +26,9 @@ server.listen(8080, () => {
 });
 
 const MONGO_URL = `mongodb+srv://petterbostrom:${process.env.MONGODB_PASSWORD}@cluster0.mcj2nln.mongodb.net/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority&appName=Cluster0`;
-console.log(MONGO_URL);
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
-mongoose.connection.on('error', (error: Error) => console.log(error));
+mongoose.connection.on("error", (error: Error) => console.log(error));
 
-app.use('/', router());
+app.use("/", router());
