@@ -14,7 +14,7 @@ export const addRecipe = async (
     };
 
     const recipe: RecipeCreateRequest = req.body;
-    if (!recipe.title || !recipe.mainCategory) {
+    if (!recipe.title || !recipe.mainCategory || !recipe.ingredients || !recipe.instructions) {
       resBody = {
         ...resBody,
         isSuccessful: false,
