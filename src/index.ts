@@ -17,6 +17,7 @@ app.use(
 
 app.use(compression());
 app.use(cookieParser());
+app.disable('x-powered-by');
 app.use(bodyParser.json({ limit: "3mb" })); // Change request size limit here
 
 const server = http.createServer(app);
