@@ -1,12 +1,14 @@
 import { Authentication } from "./authentication";
 import { Role } from "./role";
 
-export type User = {
+export type DbUser = {
+  authentication: Authentication;
+  _id: string;
   username: string;
   email: string;
-  role: Role;
-  authentication: Authentication;
   sharedRecipeIds: string[];
   favoriteRecipeIds: string[];
   friendIds: string[];
+  __v: number;
+  role: string;
 };

@@ -4,6 +4,7 @@ import isEmail from "validator/lib/isEmail";
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, validate: [isEmail, "Invalid email"] },
+  role: { type: String },
   authentication: {
     password: { type: String, required: true, select: false },
     salt: { type: String, select: false },
@@ -32,4 +33,3 @@ export const deleteUserById = (id: string) =>
   UserModel.findOneAndDelete({ _id: id });
 export const updateUserById = (id: string, values: Record<string, any>) =>
   UserModel.findByIdAndUpdate(id, values);
-

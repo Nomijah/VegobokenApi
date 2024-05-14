@@ -10,7 +10,11 @@ import { checkPassword } from "../helpers/validation";
 import { ResponseBody } from "types/responseTypes/responseBody";
 import { sendValidationMail } from "../services/mailService";
 import { hoursToMilliseconds } from "../helpers/timeConversion";
-import { deleteEmailVerificationById, getEmailVerificationByToken, upsertEmailVerification } from "../db/emailVerifications";
+import {
+  deleteEmailVerificationById,
+  getEmailVerificationByToken,
+  upsertEmailVerification,
+} from "../db/emailVerifications";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -19,14 +23,14 @@ export const login = async (req: express.Request, res: express.Response) => {
       statusCode: 400,
       errorMessages: [],
     };
-    
+
     const { email, password } = req.body;
     if (!email || !password) {
       resBody = {
         ...resBody,
         isSuccessful: false,
-        errorMessages: [...resBody.errorMessages, "All fields are required."]
-      }
+        errorMessages: [...resBody.errorMessages, "All fields are required."],
+      };
       return res.status(resBody.statusCode).json(resBody).end();
     }
 
@@ -157,9 +161,11 @@ export const register = async (req: express.Request, res: express.Response) => {
     }
 
     const salt = random();
+    const role = "user";
     const user = await createUser({
       email,
       username,
+      role,
       authentication: {
         salt,
         password: authentication(salt, password),
@@ -188,7 +194,7 @@ export const verifyEmail = async (
       statusCode: 400,
       errorMessages: [],
     };
-    
+
     const { token } = req.params;
     const emailVerification = await getEmailVerificationByToken(token);
     if (!emailVerification) {
@@ -200,7 +206,7 @@ export const verifyEmail = async (
       return res.status(resBody.statusCode).json(resBody).end();
     }
 
-    if (emailVerification.expirationTime < Date.now()){
+    if (emailVerification.expirationTime < Date.now()) {
       resBody = {
         ...resBody,
         statusCode: 403,
@@ -213,12 +219,12 @@ export const verifyEmail = async (
     user.authentication.isVerified = true;
     await user.save();
     deleteEmailVerificationById(emailVerification._id.toString());
-    
+
     resBody = {
       ...resBody,
       statusCode: 200,
       isSuccessful: true,
-      result: "User email verified."
+      result: "User email verified.",
     };
     return res.status(resBody.statusCode).json(resBody).end();
   } catch (error) {
@@ -237,7 +243,7 @@ export const resendValidationMail = async (
       statusCode: 400,
       errorMessages: [],
     };
-    
+
     const { email } = req.body;
     const user = await getUserByEmail(email);
     if (!user) {
@@ -255,7 +261,7 @@ export const resendValidationMail = async (
       ...resBody,
       statusCode: 200,
       isSuccessful: true,
-      result: "User email verified."
+      result: "User email verified.",
     };
     return res.status(resBody.statusCode).json(resBody).end();
   } catch (error) {
@@ -282,4 +288,4 @@ const createAndSendVerification = async (email: string) => {
       console.log(mail);
     }
   }
-}
+};
