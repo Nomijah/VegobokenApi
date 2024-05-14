@@ -6,6 +6,15 @@ import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./router";
+import { DbUser } from "types/dbTypes/dbUser";
+
+declare global {
+  namespace Express {
+    export interface Request {
+      identity?: DbUser;
+    }
+  }
+}
 
 const app = express();
 
@@ -17,7 +26,7 @@ app.use(
 
 app.use(compression());
 app.use(cookieParser());
-app.disable('x-powered-by');
+app.disable("x-powered-by");
 app.use(bodyParser.json({ limit: "3mb" })); // Change request size limit here
 
 const server = http.createServer(app);

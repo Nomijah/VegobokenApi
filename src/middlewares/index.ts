@@ -1,6 +1,7 @@
 import { getUserBySessionToken } from "../db/users";
 import express from "express";
 import { get, merge } from "lodash";
+import { Role } from "types/dbTypes/role";
 
 export const isOwner = async (
   req: express.Request,
@@ -49,4 +50,24 @@ export const isAuthenticated = async (
     console.log(error);
     return res.sendStatus(400);
   }
+};
+
+export const authPage = (permissions: Role[]) => {
+  return (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    try {
+      const userRole = req.identity.role;
+      if (permissions.includes(userRole as Role)) {
+        next();
+      } else {
+        return res.status(401).json("Unauthorized request.");
+      }
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(400);
+    }
+  };
 };
