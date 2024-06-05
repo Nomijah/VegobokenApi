@@ -15,7 +15,6 @@ const RecipeSchema = new mongoose.Schema({
   ],
   instructions: [{ type: String }],
   mainCategory: { type: String },
-  subCategory: { type: String },
   tags: [{ type: String }],
   imageMetadata: {
     fileName: { type: String },

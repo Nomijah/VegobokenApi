@@ -21,6 +21,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
+    origin: process.env.CLIENT_DOMAIN_ADDRESS,
   })
 );
 
@@ -31,11 +32,11 @@ app.use(bodyParser.json({ limit: "3mb" })); // Change request size limit here
 
 const server = http.createServer(app);
 
-server.listen(8080, () => {
-  console.log("Server running on http://localhost:8080/");
+server.listen(3001, () => {
+  console.log("Server running on http://localhost:3001/");
 });
 
-const MONGO_URL = `mongodb+srv://petterbostrom:${process.env.MONGODB_PASSWORD}@cluster0.mcj2nln.mongodb.net/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority&appName=Cluster0`;
+const MONGO_URL = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.mcj2nln.mongodb.net/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
