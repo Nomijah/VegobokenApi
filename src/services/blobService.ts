@@ -7,24 +7,26 @@ if (!connectionString) {
 
 const blobServiceClient =
   BlobServiceClient.fromConnectionString(connectionString);
-const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER);
+const containerClient = blobServiceClient.getContainerClient(
+  process.env.AZURE_STORAGE_CONTAINER
+);
 
-export const upsertBlob = async (file: string, name: string ) => {
-    try {
-        const blobName = name + ".jpg";
-        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-        console.log(
-            `\nUploading to Azure storage as blob\n\tname: ${blobName}:\n\tURL: ${blockBlobClient.url}`
-          );
-        
-
-    } catch (error) {
-        console.log(error);
-    }
-}
+export const upsertBlob = async (file: string, name: string) => {
+  try {
+    const blockBlobClient = containerClient.getBlockBlobClient(name);
+    console.log(
+      `\nUploading to Azure storage as blob\n\tname: ${name}:\n\tURL: ${blockBlobClient.url}`
+    );
+    const response = await blockBlobClient.upload(file, file.length);
+    console.log(blockBlobClient.url);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const uploadImageStream = async (blobName: string, dataStream: any) => {
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    const response = await blockBlobClient.uploadStream(dataStream);
-    return blockBlobClient.url;
-}
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  const response = await blockBlobClient.uploadStream(dataStream);
+  return blockBlobClient.url;
+};

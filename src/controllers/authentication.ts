@@ -24,6 +24,8 @@ export const login = async (req: express.Request, res: express.Response) => {
       errorMessages: [],
     };
 
+    console.log("login called");
+
     const { email, password } = req.body;
     if (!email || !password) {
       resBody = {
@@ -85,6 +87,9 @@ export const login = async (req: express.Request, res: express.Response) => {
       maxAge: hoursToMilliseconds(12),
       domain: "localhost",
       path: "/",
+      sameSite: "none",
+      secure: true, // only for testing
+      httpOnly: true,
     });
 
     const response: UserLoginResponse = {
