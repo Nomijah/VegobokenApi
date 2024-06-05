@@ -16,7 +16,6 @@ export const recipeCreateSchema = z.object({
     .array(),
   instructions: z.string().array().min(1, "Instructions may not be empty."),
   mainCategory: z.string().min(1, "Main category may not be empty"),
-  subCategory: z.string().optional(),
   tags: z.string().array().optional(),
   image: z
     .object({

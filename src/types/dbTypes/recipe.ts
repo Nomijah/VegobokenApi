@@ -17,7 +17,6 @@ const recipeDbSchema = z.object({
     .array(),
   instructions: z.string().array().min(1, "Instructions may not be empty."),
   mainCategory: z.string().min(1, "Main category may not be empty"),
-  subCategory: z.string(),
   tags: z.string().array(),
   imageMetadata: z.object({
     fileName: z.string(),
