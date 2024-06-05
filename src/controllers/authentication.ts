@@ -1,4 +1,4 @@
-import express from "express";
+import express, { CookieOptions } from "express";
 import { createUser, getUserByEmail, getUserByUsername } from "../db/users";
 import {
   authentication,
@@ -26,7 +26,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     console.log("login called");
 
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     if (!email || !password) {
       resBody = {
         ...resBody,
@@ -83,14 +83,19 @@ export const login = async (req: express.Request, res: express.Response) => {
     );
     await user.save();
 
-    res.cookie("vego-token", user.authentication.sessionToken, {
-      maxAge: hoursToMilliseconds(12),
+    const cookieOptions: CookieOptions = {
       domain: "localhost",
       path: "/",
       sameSite: "none",
-      secure: true, // only for testing
+      secure: true, // only false for testing
       httpOnly: true,
-    });
+    };
+
+    if (rememberMe) {
+      cookieOptions.maxAge = hoursToMilliseconds(24);
+    }
+
+    res.cookie("vego-token", user.authentication.sessionToken, cookieOptions);
 
     const response: UserLoginResponse = {
       username: user.username,
