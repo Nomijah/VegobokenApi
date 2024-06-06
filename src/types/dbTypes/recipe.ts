@@ -11,7 +11,7 @@ const recipeDbSchema = z.object({
       name: z.string(),
       quantity: z
         .number()
-        .min(1, "Ingredient quantity may not be less than one."),
+        .min(0, "Ingredient quantity may not be less than zero."),
       unit: z.string(),
     })
     .array(),
