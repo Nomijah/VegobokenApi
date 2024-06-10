@@ -26,7 +26,9 @@ export const addRecipe = async (
     if (!validatedRecipe.success) {
       console.error(validatedRecipe.error);
       resBody.isSuccessful = false;
-      resBody.errorMessages.push(validatedRecipe.error.message);
+      validatedRecipe.error.issues.map((issue) => {
+        resBody.errorMessages.push(issue.message);
+      });
       return res.status(400).json(resBody);
     }
 
