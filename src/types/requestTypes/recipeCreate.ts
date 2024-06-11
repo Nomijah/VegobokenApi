@@ -10,7 +10,7 @@ export const recipeCreateSchema = z.object({
       name: z.string(),
       quantity: z
         .number()
-        .min(0, "Ingredient quantity may not be less than zero."),
+        .min(0.001, "Ingredient quantity must be more than zero."),
       unit: z.string(),
     })
     .array(),
